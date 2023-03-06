@@ -19,18 +19,18 @@ use crate::{
         {status_code: 200, description: "Ok response", model: "OpenPostionHttpResponse"},
     ]
 )]
-pub struct ClientWithdrawalControllerHttpAction {
+pub struct OpenPositionControllerHttpAction {
     app: Arc<AppContext>,
 }
 
-impl ClientWithdrawalControllerHttpAction {
+impl OpenPositionControllerHttpAction {
     pub fn new(app: Arc<AppContext>) -> Self {
         Self { app }
     }
 }
 
 async fn handle_request(
-    action: &ClientWithdrawalControllerHttpAction,
+    action: &OpenPositionControllerHttpAction,
     input_data: OpenPositionHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {

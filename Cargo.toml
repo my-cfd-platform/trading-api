@@ -16,7 +16,7 @@ flurl = { tag = "0.2.3", git = "https://github.com/MyJetTools/fl-url.git" }
 my-settings-reader = { tag = "0.1.5", git = "https://github.com/MyJetTools/my-settings-reader.git", features = [
     "background-reader",
 ] }
-
+my-logger = { tag = "0.2.0", git = "https://github.com/MyJetTools/my-logger.git" }
 rest-api-wl-shared = {git = "https://github.com/my-cfd-platform/rest-api-wl-shared", tag = "0.1.1" }
 
 is-alive-middleware = { tag = "0.5.0", git = "https://github.com/MyJetTools/is-alive-middleware.git" }
