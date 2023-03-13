@@ -1,8 +1,8 @@
 use crate::{
     trading_executor::{
-        TradingExecutorActivePositionGrpcModel, TradingExecutorOpenPositionGrpcRequest,
+        TradingExecutorActivePositionGrpcModel, TradingExecutorOpenPositionGrpcRequest, TradingExecutorClosedPositionGrpcModel,
     },
-    ActivePositionApiModel, OpenPositionHttpRequest, SlTpType, ApiResponseCodes,
+    ActivePositionApiModel, OpenPositionHttpRequest, SlTpType, ApiResponseCodes, ClosedPositionApiModel,
 };
 
 impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
@@ -43,6 +43,47 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
 
         return model;
     }
+}
+
+pub fn map_closed_grpc_to_api(response: TradingExecutorClosedPositionGrpcModel, account_id: &str) -> ClosedPositionApiModel{ 
+    let mut http =  ClosedPositionApiModel{
+        id: response.id,
+        account_id: account_id.to_string(),
+        instrument: response.asset_pair,
+        invest_amount: response.invest_amount,
+        open_price: response.open_price,
+        open_date: response.open_date,
+        operation: response.side.into(),
+        tp: None,
+        sl: None,
+        tp_type: None,
+        sl_type: None,
+        multiplier: todo!(),
+        close_price: response.close_price,
+        close_date: response.open_date,
+        swap: 0.0,
+        commissions: 0.0,
+    };
+
+    if response.sl_in_asset_price.is_some() {
+        http.sl_type = Some(SlTpType::Currency);
+        http.sl = response.sl_in_asset_price;
+    };
+
+    if response.sl_in_profit.is_some() {
+        http.sl_type = Some(SlTpType::Percent);
+        http.sl = response.sl_in_profit;
+    };
+
+    if response.tp_in_asset_price.is_some() {
+        http.tp_type = Some(SlTpType::Currency);
+        http.tp = response.tp_in_asset_price;
+    };
+
+    if response.tp_in_profit.is_some() {
+        http.tp_type = Some(SlTpType::Percent);
+        http.tp = response.tp_in_profit;
+    };
 }
 
 pub fn map_http_to_grpc_open_position(

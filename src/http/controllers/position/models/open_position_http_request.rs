@@ -52,6 +52,7 @@ pub struct OpenPositionHttpResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[serde(rename_all(deserialize = "camelCase"))]
 pub struct ActivePositionApiModel {
     pub id: String,
     pub account_id: String,

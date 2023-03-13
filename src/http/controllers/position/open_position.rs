@@ -12,7 +12,7 @@ use crate::{
     method: "POST",
     route: "api/trading/v1/Positions/Open",
     summary: "Open position",
-    description: "Returns client withdrawals",
+    description: "Open client position",
     controller: "Positions Controller",
     input_data: "OpenPositionHttpRequest",
     result:[
