@@ -46,7 +46,7 @@ pub struct OpenPositionHttpRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
-pub struct OpenPostionHttpResponse {
+pub struct OpenPositionHttpResponse {
     pub result: ApiResponseCodes,
     pub position: Option<ActivePositionApiModel>,
 }

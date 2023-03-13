@@ -4,19 +4,19 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    map_http_to_grpc_ppen_position, ApiResponseCodes, AppContext, OpenPositionHttpRequest,
-    OpenPostionHttpResponse,
+    map_http_to_grpc_open_position, ApiResponseCodes, AppContext, OpenPositionHttpRequest,
+    OpenPositionHttpResponse,
 };
 
 #[my_http_server_swagger::http_route(
     method: "POST",
-    route: "api/v1/Positions/Open",
-    summary: "Get client withdrawals",
+    route: "api/trading/v1/Positions/Open",
+    summary: "Open position",
     description: "Returns client withdrawals",
-    controller: "ClientWithdrawal",
+    controller: "Positions Controller",
     input_data: "OpenPositionHttpRequest",
     result:[
-        {status_code: 200, description: "Ok response", model: "OpenPostionHttpResponse"},
+        {status_code: 200, description: "Ok response", model: "OpenPositionHttpResponse"},
     ]
 )]
 pub struct OpenPositionControllerHttpAction {
@@ -36,7 +36,7 @@ async fn handle_request(
 ) -> Result<HttpOkResult, HttpFailResult> {
     let trader_id = ctx.get_client_id().unwrap();
 
-    let request = map_http_to_grpc_ppen_position(&input_data, trader_id);
+    let request = map_http_to_grpc_open_position(&input_data, trader_id);
 
     let grpc_response = action
         .app
@@ -45,11 +45,11 @@ async fn handle_request(
         .await;
 
     let response = match grpc_response.positon {
-        Some(position) => OpenPostionHttpResponse {
+        Some(position) => OpenPositionHttpResponse {
             result: ApiResponseCodes::Ok,
             position: Some(position.into()),
         },
-        None => OpenPostionHttpResponse {
+        None => OpenPositionHttpResponse {
             result: ApiResponseCodes::Ok,
             position: None,
         },

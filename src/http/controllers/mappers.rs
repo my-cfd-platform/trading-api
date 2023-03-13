@@ -45,7 +45,7 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
     }
 }
 
-pub fn map_http_to_grpc_ppen_position(
+pub fn map_http_to_grpc_open_position(
     open_http_request: &OpenPositionHttpRequest,
     trader_id: &str,
 ) -> TradingExecutorOpenPositionGrpcRequest {
