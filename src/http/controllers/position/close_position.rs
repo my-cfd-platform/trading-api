@@ -10,7 +10,7 @@ use crate::{
 
 #[my_http_server_swagger::http_route(
     method: "POST",
-    route: "api/trading/v1/Positions/Close",
+    route: "/api/trading/v1/Positions/Close",
     summary: "Close position",
     description: "Close client position",
     controller: "Positions Controller",
