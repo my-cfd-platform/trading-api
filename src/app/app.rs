@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use my_no_sql_tcp_reader::{MyNoSqlDataReader, MyNoSqlTcpConnection};
-use my_nosql_contracts::*;
+use rest_api_wl_shared::middlewares::SessionEntity;
 use rust_extensions::AppStates;
 
 use crate::{SettingsModel, TradingExecutorGrpcClient};
