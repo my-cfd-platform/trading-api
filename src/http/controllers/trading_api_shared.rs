@@ -120,4 +120,13 @@ pub enum ApiResponseCodes {
 
     #[http_enum_case(id="21"; value="21"; description="")]
     NotEnoughBalance,
+
+    #[http_enum_case(id="22"; value="21"; description="")]
+    TradingGroupNotFound,
+
+    #[http_enum_case(id="23"; value="21"; description="")]
+    TradingProfileNotFound,
+
+    #[http_enum_case(id="24"; value="21"; description="")]
+    TradingProfileInstrumentNotFound,
 }

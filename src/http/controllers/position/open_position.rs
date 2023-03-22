@@ -46,11 +46,11 @@ async fn handle_request(
 
     let response = match grpc_response.positon {
         Some(position) => OpenPositionHttpResponse {
-            result: ApiResponseCodes::Ok,
+            result: grpc_response.status.into(),
             position: Some(position.into()),
         },
         None => OpenPositionHttpResponse {
-            result: ApiResponseCodes::Ok,
+            result: grpc_response.status.into(),
             position: None,
         },
     };

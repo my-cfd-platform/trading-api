@@ -1,8 +1,10 @@
 use crate::{
     trading_executor::{
-        TradingExecutorActivePositionGrpcModel, TradingExecutorOpenPositionGrpcRequest, TradingExecutorClosedPositionGrpcModel,
+        TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
+        TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
     },
-    ActivePositionApiModel, OpenPositionHttpRequest, SlTpType, ApiResponseCodes, ClosedPositionApiModel,
+    ActivePositionApiModel, ApiResponseCodes, ClosedPositionApiModel, OpenPositionHttpRequest,
+    SlTpType,
 };
 
 impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
@@ -45,8 +47,11 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
     }
 }
 
-pub fn map_closed_grpc_to_api(response: TradingExecutorClosedPositionGrpcModel, account_id: &str) -> ClosedPositionApiModel{ 
-    let mut http =  ClosedPositionApiModel{
+pub fn map_closed_grpc_to_api(
+    response: TradingExecutorClosedPositionGrpcModel,
+    account_id: &str,
+) -> ClosedPositionApiModel {
+    let mut http = ClosedPositionApiModel {
         id: response.id,
         account_id: account_id.to_string(),
         instrument: response.asset_pair,
@@ -131,9 +136,61 @@ pub fn map_http_to_grpc_open_position(
     return open_request;
 }
 
+impl Into<ApiResponseCodes> for TradingExecutorOperationsCodes {
+    fn into(self) -> ApiResponseCodes {
+        match self {
+            TradingExecutorOperationsCodes::Ok => ApiResponseCodes::Ok,
+            TradingExecutorOperationsCodes::DayOff => ApiResponseCodes::DayOff,
+            TradingExecutorOperationsCodes::OperationIsTooLow => {
+                ApiResponseCodes::MinOperationLotViolated
+            }
+            TradingExecutorOperationsCodes::OperationIsTooHigh => {
+                ApiResponseCodes::MaxOperationLotViolated
+            }
+            TradingExecutorOperationsCodes::MinOperationsByInstrumentViolated => {
+                ApiResponseCodes::MaxPositionByInstrumentViolated
+            }
+            TradingExecutorOperationsCodes::MaxOperationsByInstrumentViolated => {
+                ApiResponseCodes::MaxPositionByInstrumentViolated
+            }
+            TradingExecutorOperationsCodes::NotEnoughBalance => ApiResponseCodes::NotEnoughBalance,
+            TradingExecutorOperationsCodes::NoLiquidity => ApiResponseCodes::NoLiquidity,
+            TradingExecutorOperationsCodes::PositionNotFound => ApiResponseCodes::PositionNotFound,
+            TradingExecutorOperationsCodes::TpIsTooClose => ApiResponseCodes::TpIsTooClose,
+            TradingExecutorOperationsCodes::SlIsTooClose => ApiResponseCodes::SlIsTooClose,
+            TradingExecutorOperationsCodes::AccountNotFound => ApiResponseCodes::AccountNotFound,
+            TradingExecutorOperationsCodes::InstrumentNotFound => {
+                ApiResponseCodes::InstrumentNotFound
+            }
+            TradingExecutorOperationsCodes::InstrumentIsNotTradable => {
+                ApiResponseCodes::InstrumentCanNotBeUsed
+            }
+            TradingExecutorOperationsCodes::HitMaxAmountOfPendingOrders => {
+                ApiResponseCodes::MaxAmountPendingOrders
+            }
+            TradingExecutorOperationsCodes::TechError => ApiResponseCodes::TechnicalError,
+            TradingExecutorOperationsCodes::MultiplierIsNotFound => {
+                ApiResponseCodes::MultiplierNotFound
+            }
+            TradingExecutorOperationsCodes::TradingDisabled => ApiResponseCodes::TradingDisabled,
+            TradingExecutorOperationsCodes::MaxPositionsAmount => {
+                ApiResponseCodes::MaxOpenPositionsAmount
+            }
+            TradingExecutorOperationsCodes::TradingGroupNotFound => {
+                ApiResponseCodes::TradingGroupNotFound
+            }
+            TradingExecutorOperationsCodes::TradingProfileNotFound => {
+                ApiResponseCodes::TradingProfileNotFound
+            }
+            TradingExecutorOperationsCodes::TradingProfileInstrumentNotFound => {
+                ApiResponseCodes::TradingProfileInstrumentNotFound
+            }
+        }
+    }
+}
 
-pub fn map_trading_executor_error_into_http_error(trading_executor_error: i32) -> ApiResponseCodes{
-    match trading_executor_error{
+pub fn map_trading_executor_error_into_http_error(trading_executor_error: i32) -> ApiResponseCodes {
+    match trading_executor_error {
         0 => ApiResponseCodes::Ok,
         1 => ApiResponseCodes::DayOff,
         2 => ApiResponseCodes::MinOperationLotViolated,
@@ -156,6 +213,6 @@ pub fn map_trading_executor_error_into_http_error(trading_executor_error: i32) -
         19 => ApiResponseCodes::TechnicalError,
         20 => ApiResponseCodes::TechnicalError,
         21 => ApiResponseCodes::NotEnoughBalance,
-        _ => panic!("Unknown error code")
+        _ => panic!("Unknown error code"),
     }
 }
