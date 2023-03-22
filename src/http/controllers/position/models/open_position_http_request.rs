@@ -29,7 +29,7 @@ pub struct OpenPositionHttpRequest {
     pub account_id: String,
     #[http_form_data(name = "instrumentId"; description = "Instrument id")]
     pub instrument_id: String,
-    #[http_form_data(name = "investAmount"; description = "Invest amount")]
+    #[http_form_data(name = "investmentAmount"; description = "Invest amount")]
     pub invest_amount: f64,
     #[http_form_data(name = "multiplier"; description = "Leverage ")]
     pub multiplier: i32,
