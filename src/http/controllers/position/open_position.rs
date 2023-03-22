@@ -4,8 +4,8 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    map_http_to_grpc_open_position, AppContext, OpenPositionHttpRequest,
-    OpenPositionHttpResponse,
+    map_http_to_grpc_open_position, trading_executor::TradingExecutorOperationsCodes,
+    AppContext, OpenPositionHttpRequest, OpenPositionHttpResponse,
 };
 
 #[my_http_server_swagger::http_route(
@@ -51,10 +51,15 @@ async fn handle_request(
             result: grpc_response.status.into(),
             position: Some(position.into()),
         },
-        None => OpenPositionHttpResponse {
-            result: grpc_response.status.into(),
-            position: None,
-        },
+        None => {
+            let status: Option<TradingExecutorOperationsCodes> =
+                TradingExecutorOperationsCodes::from_i32(grpc_response.status);
+
+            OpenPositionHttpResponse {
+                result: status.unwrap().into(),
+                position: None,
+            }
+        }
     };
 
     return HttpOutput::as_json(response).into_ok_result(true).into();
