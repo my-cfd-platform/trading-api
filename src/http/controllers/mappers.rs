@@ -138,53 +138,29 @@ pub fn map_http_to_grpc_open_position(
 
 impl Into<ApiResponseCodes> for TradingExecutorOperationsCodes {
     fn into(self) -> ApiResponseCodes {
-        match self {
-            TradingExecutorOperationsCodes::Ok => ApiResponseCodes::Ok,
-            TradingExecutorOperationsCodes::DayOff => ApiResponseCodes::DayOff,
-            TradingExecutorOperationsCodes::OperationIsTooLow => {
-                ApiResponseCodes::MinOperationLotViolated
-            }
-            TradingExecutorOperationsCodes::OperationIsTooHigh => {
-                ApiResponseCodes::MaxOperationLotViolated
-            }
-            TradingExecutorOperationsCodes::MinOperationsByInstrumentViolated => {
-                ApiResponseCodes::MaxPositionByInstrumentViolated
-            }
-            TradingExecutorOperationsCodes::MaxOperationsByInstrumentViolated => {
-                ApiResponseCodes::MaxPositionByInstrumentViolated
-            }
-            TradingExecutorOperationsCodes::NotEnoughBalance => ApiResponseCodes::NotEnoughBalance,
-            TradingExecutorOperationsCodes::NoLiquidity => ApiResponseCodes::NoLiquidity,
-            TradingExecutorOperationsCodes::PositionNotFound => ApiResponseCodes::PositionNotFound,
-            TradingExecutorOperationsCodes::TpIsTooClose => ApiResponseCodes::TpIsTooClose,
-            TradingExecutorOperationsCodes::SlIsTooClose => ApiResponseCodes::SlIsTooClose,
-            TradingExecutorOperationsCodes::AccountNotFound => ApiResponseCodes::AccountNotFound,
-            TradingExecutorOperationsCodes::InstrumentNotFound => {
-                ApiResponseCodes::InstrumentNotFound
-            }
-            TradingExecutorOperationsCodes::InstrumentIsNotTradable => {
-                ApiResponseCodes::InstrumentCanNotBeUsed
-            }
-            TradingExecutorOperationsCodes::HitMaxAmountOfPendingOrders => {
-                ApiResponseCodes::MaxAmountPendingOrders
-            }
-            TradingExecutorOperationsCodes::TechError => ApiResponseCodes::TechnicalError,
-            TradingExecutorOperationsCodes::MultiplierIsNotFound => {
-                ApiResponseCodes::MultiplierNotFound
-            }
-            TradingExecutorOperationsCodes::TradingDisabled => ApiResponseCodes::TradingDisabled,
-            TradingExecutorOperationsCodes::MaxPositionsAmount => {
-                ApiResponseCodes::MaxOpenPositionsAmount
-            }
-            TradingExecutorOperationsCodes::TradingGroupNotFound => {
-                ApiResponseCodes::TradingGroupNotFound
-            }
-            TradingExecutorOperationsCodes::TradingProfileNotFound => {
-                ApiResponseCodes::TradingProfileNotFound
-            }
-            TradingExecutorOperationsCodes::TradingProfileInstrumentNotFound => {
-                ApiResponseCodes::TradingProfileInstrumentNotFound
-            }
+        match self{
+            TradingExecutorOperationsCodes::Ok => todo!(),
+            TradingExecutorOperationsCodes::DayOff => todo!(),
+            TradingExecutorOperationsCodes::OperationIsTooLow => todo!(),
+            TradingExecutorOperationsCodes::OperationIsTooHigh => todo!(),
+            TradingExecutorOperationsCodes::MinOperationsByInstrumentViolated => todo!(),
+            TradingExecutorOperationsCodes::MaxOperationsByInstrumentViolated => todo!(),
+            TradingExecutorOperationsCodes::NotEnoughBalance => todo!(),
+            TradingExecutorOperationsCodes::NoLiquidity => todo!(),
+            TradingExecutorOperationsCodes::PositionNotFound => todo!(),
+            TradingExecutorOperationsCodes::TpIsTooClose => todo!(),
+            TradingExecutorOperationsCodes::SlIsTooClose => todo!(),
+            TradingExecutorOperationsCodes::AccountNotFound => todo!(),
+            TradingExecutorOperationsCodes::InstrumentNotFound => todo!(),
+            TradingExecutorOperationsCodes::InstrumentIsNotTradable => todo!(),
+            TradingExecutorOperationsCodes::HitMaxAmountOfPendingOrders => todo!(),
+            TradingExecutorOperationsCodes::TechError => todo!(),
+            TradingExecutorOperationsCodes::MultiplierIsNotFound => todo!(),
+            TradingExecutorOperationsCodes::TradingDisabled => todo!(),
+            TradingExecutorOperationsCodes::MaxPositionsAmount => todo!(),
+            TradingExecutorOperationsCodes::TradingGroupNotFound => todo!(),
+            TradingExecutorOperationsCodes::TradingProfileNotFound => todo!(),
+            TradingExecutorOperationsCodes::TradingProfileInstrumentNotFound => todo!(),
         }
     }
 }

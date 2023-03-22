@@ -4,7 +4,7 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    map_http_to_grpc_open_position, ApiResponseCodes, AppContext, OpenPositionHttpRequest,
+    map_http_to_grpc_open_position, AppContext, OpenPositionHttpRequest,
     OpenPositionHttpResponse,
 };
 
@@ -43,6 +43,8 @@ async fn handle_request(
         .trading_executor_grpc_service
         .open_position(request)
         .await;
+
+    println!("grpc_response: {:?}", grpc_response);
 
     let response = match grpc_response.positon {
         Some(position) => OpenPositionHttpResponse {

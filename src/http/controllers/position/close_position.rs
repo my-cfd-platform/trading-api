@@ -49,6 +49,8 @@ async fn handle_request(
         .close_position(request)
         .await;
 
+    println!("grpc_response: {:?}", grpc_response);
+
     let response = match grpc_response.position {
         Some(position) => ClosePositionHttpResponse {
             result: ApiResponseCodes::Ok,
