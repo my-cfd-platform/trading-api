@@ -53,17 +53,22 @@ pub struct OpenPositionHttpResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
-#[serde(rename_all(deserialize = "camelCase"))]
 pub struct ActivePositionApiModel {
     pub id: String,
+    #[serde(rename = "accountId")]
     pub account_id: String,
     pub instrument: String,
+    #[serde(rename = "investAmount")]
     pub invest_amount: f64,
+    #[serde(rename = "openPrice")]
     pub open_price: f64,
+    #[serde(rename = "openDate")]
     pub open_date: u64,
     pub operation: PositionSide,
     pub tp: Option<f64>,
     pub sl: Option<f64>,
+    #[serde(rename = "tpType")]
     pub tp_type: Option<SlTpType>,
+    #[serde(rename = "slType")]
     pub sl_type: Option<SlTpType>,
 }
