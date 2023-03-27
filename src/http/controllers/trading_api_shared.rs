@@ -1,7 +1,8 @@
 use my_http_server_swagger::MyHttpIntegerEnum;
-use serde::{Deserialize, Serialize};
+use serde_repr::{Serialize_repr, Deserialize_repr};
 
-#[derive(Clone, Copy, Deserialize, Serialize, Debug, MyHttpIntegerEnum)]
+#[derive(Clone, Copy, Serialize_repr, Deserialize_repr, Debug, MyHttpIntegerEnum)]
+#[repr(u8)]
 pub enum ApiResponseCodes {
     #[http_enum_case(id="0"; value="0"; description="")]
     Ok,
@@ -19,22 +20,10 @@ pub enum ApiResponseCodes {
     NoLiquidity,
     #[http_enum_case(id="7"; value="7"; description="")]
     PositionNotFound,
-
-    // /// <summary>
-    // /// Take profit is to close to the market
-    // /// </summary>
     #[http_enum_case(id="8"; value="8"; description="")]
     TpIsTooClose,
-
-    // /// <summary>
-    // /// Sto loss is to close to the market
-    // /// </summary>
     #[http_enum_case(id="9"; value="9"; description="")]
     SlIsTooClose,
-
-    // /// <summary>
-    // /// Pending order is not found to perform operation
-    // /// </summary>
     #[http_enum_case(id="10"; value="10"; description="")]
     PendingOrderNotFound,
 

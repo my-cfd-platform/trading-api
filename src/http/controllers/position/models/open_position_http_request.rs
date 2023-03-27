@@ -46,6 +46,7 @@ pub struct OpenPositionHttpRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[serde(rename_all(deserialize = "camelCase"))]
 pub struct OpenPositionHttpResponse {
     pub result: ApiResponseCodes,
     pub position: Option<ActivePositionApiModel>,

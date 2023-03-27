@@ -31,6 +31,7 @@ prost-types = "*"
 serde = "*"
 serde_yaml = "*"
 serde_json = "*"
+serde_repr = "*"
 tonic = { version = "*", features = ["tls", "tls-roots", "prost"] }
 tokio = { version = "*", features = ["full"] }
 
