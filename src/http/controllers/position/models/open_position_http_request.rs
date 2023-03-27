@@ -1,9 +1,11 @@
 use my_http_server_swagger::{MyHttpInput, MyHttpIntegerEnum, MyHttpObjectStructure};
 use serde::{Deserialize, Serialize};
+use serde_repr::{Serialize_repr, Deserialize_repr};
 
 use crate::ApiResponseCodes;
 
-#[derive(Clone, Copy, Deserialize, Debug, Serialize, MyHttpIntegerEnum)]
+#[derive(Clone, Copy, Serialize_repr, Debug, Deserialize_repr, MyHttpIntegerEnum)]
+#[repr(u8)]
 pub enum SlTpType {
     #[http_enum_case(id="0"; value="i"; description="")]
     Currency,
@@ -13,7 +15,8 @@ pub enum SlTpType {
     Percent,
 }
 
-#[derive(Clone, Copy, Deserialize, Debug, Serialize, MyHttpIntegerEnum)]
+#[derive(Clone, Copy, Deserialize_repr, Debug, Serialize_repr, MyHttpIntegerEnum)]
+#[repr(u8)]
 pub enum PositionSide {
     #[http_enum_case(id="0"; value="0"; description="")]
     Buy,
