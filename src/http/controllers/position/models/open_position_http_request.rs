@@ -57,7 +57,7 @@ pub struct OpenPositionHttpResponse {
 
 #[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
 pub struct ActivePositionApiModel {
-    pub id: String,
+    pub id: u64,
     #[serde(rename = "accountId")]
     pub account_id: String,
     pub instrument: String,
