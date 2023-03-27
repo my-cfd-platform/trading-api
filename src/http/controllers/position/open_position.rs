@@ -37,7 +37,7 @@ async fn handle_request(
     let trader_id = ctx.get_client_id().unwrap();
 
     let request = map_http_to_grpc_open_position(&input_data, trader_id);
-
+    println!("grpc_request: {:?}", request);
     let grpc_response = action
         .app
         .trading_executor_grpc_service
