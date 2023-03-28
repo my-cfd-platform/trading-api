@@ -1,14 +1,26 @@
 use crate::{
     trading_executor::{
         TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
-        TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
+        TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes, TradingExecutorPositionSide,
     },
     ActivePositionApiModel, ApiResponseCodes, ClosedPositionApiModel, OpenPositionHttpRequest,
-    SlTpType,
+    SlTpType, PositionSide,
 };
+
+impl Into<PositionSide> for TradingExecutorPositionSide {
+    fn into(self) -> PositionSide {
+        match self{
+            TradingExecutorPositionSide::Buy => PositionSide::Buy,
+            TradingExecutorPositionSide::Sell => PositionSide::Sell,
+        }
+    }
+}
 
 impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
     fn into(self) -> ActivePositionApiModel {
+
+        let side = TradingExecutorPositionSide::from_i32(self.side).unwrap();
+
         let mut model = ActivePositionApiModel {
             id: self.open_date,
             account_id: self.account_id,
@@ -16,7 +28,7 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
             invest_amount: self.invest_amount,
             open_price: self.open_price,
             open_date: self.open_date,
-            operation: self.side.into(),
+            operation: side.into(),
             tp: None,
             sl: None,
             tp_type: None,

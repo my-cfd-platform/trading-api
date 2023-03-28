@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use my_logger::MyLogger;
-use trading_api::{SettingsModel, AppContext, setup_server, SettingsReader};
+use trading_api::{AppContext, setup_server, SettingsReader};
 
 #[tokio::main]
 async fn main() {

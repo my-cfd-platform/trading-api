@@ -43,6 +43,8 @@ async fn handle_request(
         trader_id: trader_id.to_string(),
     };
 
+    println!("request: {:?}", request);
+
     let grpc_response = action
         .app
         .trading_executor_grpc_service
