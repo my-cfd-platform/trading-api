@@ -26,7 +26,7 @@ pub struct ClosedPositionApiModel {
     pub account_id: String,
     pub instrument: String,
     pub invest_amount: f64,
-    pub multiplier: i32,
+    pub multiplier: f64,
     pub open_price: f64,
     pub open_date: u64,
     pub operation: PositionSide,

@@ -1,15 +1,16 @@
 use crate::{
     trading_executor::{
         TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
-        TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes, TradingExecutorPositionSide,
+        TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
+        TradingExecutorPositionSide,
     },
     ActivePositionApiModel, ApiResponseCodes, ClosedPositionApiModel, OpenPositionHttpRequest,
-    SlTpType, PositionSide,
+    PositionSide, SlTpType,
 };
 
 impl Into<PositionSide> for TradingExecutorPositionSide {
     fn into(self) -> PositionSide {
-        match self{
+        match self {
             TradingExecutorPositionSide::Buy => PositionSide::Buy,
             TradingExecutorPositionSide::Sell => PositionSide::Sell,
         }
@@ -18,7 +19,6 @@ impl Into<PositionSide> for TradingExecutorPositionSide {
 
 impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
     fn into(self) -> ActivePositionApiModel {
-
         let side = TradingExecutorPositionSide::from_i32(self.side).unwrap();
 
         let mut model = ActivePositionApiModel {
@@ -75,7 +75,7 @@ pub fn map_closed_grpc_to_api(
         sl: None,
         tp_type: None,
         sl_type: None,
-        multiplier: todo!(),
+        multiplier: response.leverage,
         close_price: response.close_price,
         close_date: response.open_date,
         swap: 0.0,
@@ -101,6 +101,8 @@ pub fn map_closed_grpc_to_api(
         http.tp_type = Some(SlTpType::Percent);
         http.tp = response.tp_in_profit;
     };
+
+    return http;
 }
 
 pub fn map_http_to_grpc_open_position(
@@ -150,29 +152,53 @@ pub fn map_http_to_grpc_open_position(
 
 impl Into<ApiResponseCodes> for TradingExecutorOperationsCodes {
     fn into(self) -> ApiResponseCodes {
-        match self{
-            TradingExecutorOperationsCodes::Ok => todo!(),
-            TradingExecutorOperationsCodes::DayOff => todo!(),
-            TradingExecutorOperationsCodes::OperationIsTooLow => todo!(),
-            TradingExecutorOperationsCodes::OperationIsTooHigh => todo!(),
-            TradingExecutorOperationsCodes::MinOperationsByInstrumentViolated => todo!(),
-            TradingExecutorOperationsCodes::MaxOperationsByInstrumentViolated => todo!(),
-            TradingExecutorOperationsCodes::NotEnoughBalance => todo!(),
-            TradingExecutorOperationsCodes::NoLiquidity => todo!(),
-            TradingExecutorOperationsCodes::PositionNotFound => todo!(),
-            TradingExecutorOperationsCodes::TpIsTooClose => todo!(),
-            TradingExecutorOperationsCodes::SlIsTooClose => todo!(),
-            TradingExecutorOperationsCodes::AccountNotFound => todo!(),
-            TradingExecutorOperationsCodes::InstrumentNotFound => todo!(),
-            TradingExecutorOperationsCodes::InstrumentIsNotTradable => todo!(),
-            TradingExecutorOperationsCodes::HitMaxAmountOfPendingOrders => todo!(),
-            TradingExecutorOperationsCodes::TechError => todo!(),
-            TradingExecutorOperationsCodes::MultiplierIsNotFound => todo!(),
-            TradingExecutorOperationsCodes::TradingDisabled => todo!(),
-            TradingExecutorOperationsCodes::MaxPositionsAmount => todo!(),
-            TradingExecutorOperationsCodes::TradingGroupNotFound => todo!(),
-            TradingExecutorOperationsCodes::TradingProfileNotFound => todo!(),
-            TradingExecutorOperationsCodes::TradingProfileInstrumentNotFound => todo!(),
+        match self {
+            TradingExecutorOperationsCodes::Ok => ApiResponseCodes::Ok,
+            TradingExecutorOperationsCodes::DayOff => ApiResponseCodes::DayOff,
+            TradingExecutorOperationsCodes::OperationIsTooLow => {
+                ApiResponseCodes::MinOperationLotViolated
+            }
+            TradingExecutorOperationsCodes::OperationIsTooHigh => {
+                ApiResponseCodes::MaxOperationLotViolated
+            }
+            TradingExecutorOperationsCodes::MinOperationsByInstrumentViolated => {
+                ApiResponseCodes::MinOperationLotViolated
+            }
+            TradingExecutorOperationsCodes::MaxOperationsByInstrumentViolated => {
+                ApiResponseCodes::MaxOperationLotViolated
+            }
+            TradingExecutorOperationsCodes::NotEnoughBalance => ApiResponseCodes::NotEnoughBalance,
+            TradingExecutorOperationsCodes::NoLiquidity => ApiResponseCodes::NoLiquidity,
+            TradingExecutorOperationsCodes::PositionNotFound => ApiResponseCodes::PositionNotFound,
+            TradingExecutorOperationsCodes::TpIsTooClose => ApiResponseCodes::TpIsTooClose,
+            TradingExecutorOperationsCodes::SlIsTooClose => ApiResponseCodes::SlIsTooClose,
+            TradingExecutorOperationsCodes::AccountNotFound => ApiResponseCodes::AccountNotFound,
+            TradingExecutorOperationsCodes::InstrumentNotFound => {
+                ApiResponseCodes::InstrumentNotFound
+            }
+            TradingExecutorOperationsCodes::InstrumentIsNotTradable => {
+                ApiResponseCodes::InstrumentNotFound
+            }
+            TradingExecutorOperationsCodes::HitMaxAmountOfPendingOrders => {
+                ApiResponseCodes::MaxAmountPendingOrders
+            }
+            TradingExecutorOperationsCodes::TechError => ApiResponseCodes::TechnicalError,
+            TradingExecutorOperationsCodes::MultiplierIsNotFound => {
+                ApiResponseCodes::MultiplierNotFound
+            }
+            TradingExecutorOperationsCodes::TradingDisabled => ApiResponseCodes::TradingDisabled,
+            TradingExecutorOperationsCodes::MaxPositionsAmount => {
+                ApiResponseCodes::MaxOpenPositionsAmount
+            }
+            TradingExecutorOperationsCodes::TradingGroupNotFound => {
+                ApiResponseCodes::TradingGroupNotFound
+            }
+            TradingExecutorOperationsCodes::TradingProfileNotFound => {
+                ApiResponseCodes::TradingProfileNotFound
+            }
+            TradingExecutorOperationsCodes::TradingProfileInstrumentNotFound => {
+                ApiResponseCodes::TradingProfileInstrumentNotFound
+            }
         }
     }
 }
