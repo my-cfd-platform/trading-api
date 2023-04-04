@@ -22,7 +22,7 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
         let side = TradingExecutorPositionSide::from_i32(self.side).unwrap();
 
         let mut model = ActivePositionApiModel {
-            id: self.open_date,
+            id: self.id,
             account_id: self.account_id,
             instrument: self.asset_pair,
             invest_amount: self.invest_amount,

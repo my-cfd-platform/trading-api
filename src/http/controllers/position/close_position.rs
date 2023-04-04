@@ -4,7 +4,8 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    map_closed_grpc_to_api, trading_executor::TradingExecutorClosePositionGrpcRequest,
+    map_closed_grpc_to_api,
+    trading_executor::{TradingExecutorClosePositionGrpcRequest, TradingExecutorOperationsCodes},
     ApiResponseCodes, AppContext, ClosePositionHttpRequest, ClosePositionHttpResponse,
 };
 
@@ -58,10 +59,14 @@ async fn handle_request(
             result: ApiResponseCodes::Ok,
             position: Some(map_closed_grpc_to_api(position, &input_data.account_id)),
         },
-        None => ClosePositionHttpResponse {
-            result: ApiResponseCodes::PositionNotFound,
-            position: None,
-        },
+        None => {
+            let te_status = TradingExecutorOperationsCodes::from_i32(grpc_response.status).unwrap();
+
+            ClosePositionHttpResponse {
+                result: te_status.into(),
+                position: None,
+            }
+        }
     };
 
     return HttpOutput::as_json(response).into_ok_result(true).into();
