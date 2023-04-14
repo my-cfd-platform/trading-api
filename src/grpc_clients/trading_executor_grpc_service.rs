@@ -5,7 +5,7 @@ use tonic::transport::Channel;
 
 use crate::trading_executor::{
     trading_executor_grpc_service_client::TradingExecutorGrpcServiceClient,
-    TradingExecutorActivePositionGrpcModel, TradingExecutorGetActivePositionsGrpcRequest, TradingExecutorOpenPositionGrpcRequest, TradingExecutorOpenPositionGrpcResponse, TradingExecutorClosePositionGrpcRequest, TradingExecutorClosePositionGrpcResponse,
+    TradingExecutorActivePositionGrpcModel, TradingExecutorGetActivePositionsGrpcRequest, TradingExecutorOpenPositionGrpcRequest, TradingExecutorOpenPositionGrpcResponse, TradingExecutorClosePositionGrpcRequest, TradingExecutorClosePositionGrpcResponse, TradingExecutorUpdateSlTpGrpcRequest, TradingExecutorUpdateSlTpGrpcResponse,
 };
 
 struct TradingExecutorSettingsGrpcUrl(String);
@@ -54,6 +54,12 @@ impl TradingExecutorGrpcClient {
         let mut grpc_client = self.create_grpc_service().await;
 
         return grpc_client.close_position(request).await.unwrap().into_inner();
+    }
+
+    pub async fn update_sl_tp(&self, request: TradingExecutorUpdateSlTpGrpcRequest) -> TradingExecutorUpdateSlTpGrpcResponse{
+        let mut grpc_client = self.create_grpc_service().await;
+
+        return grpc_client.update_sl_tp(request).await.unwrap().into_inner();
     }
 
     pub async fn get_active_positions(
