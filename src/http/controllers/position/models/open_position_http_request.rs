@@ -61,7 +61,7 @@ pub struct ActivePositionApiModel {
     #[serde(rename = "accountId")]
     pub account_id: String,
     pub instrument: String,
-    #[serde(rename = "investAmount")]
+    #[serde(rename = "investmentAmount")]
     pub invest_amount: f64,
     #[serde(rename = "openPrice")]
     pub open_price: f64,
