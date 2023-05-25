@@ -199,6 +199,7 @@ impl Into<ApiResponseCodes> for TradingExecutorOperationsCodes {
             TradingExecutorOperationsCodes::TradingProfileInstrumentNotFound => {
                 ApiResponseCodes::TradingProfileInstrumentNotFound
             }
+            TradingExecutorOperationsCodes::ABookReject => ApiResponseCodes::ExecutionReject,
         }
     }
 }
