@@ -5,7 +5,9 @@ use rest_api_wl_shared::GetClientId;
 
 use crate::{
     map_closed_grpc_to_api,
-    trading_executor::{TradingExecutorClosePositionGrpcRequest, TradingExecutorOperationsCodes},
+    trading_executor_grpc::{
+        TradingExecutorClosePositionGrpcRequest, TradingExecutorOperationsCodes,
+    },
     ApiResponseCodes, AppContext, ClosePositionHttpRequest, ClosePositionHttpResponse,
 };
 
@@ -49,8 +51,9 @@ async fn handle_request(
     let grpc_response = action
         .app
         .trading_executor_grpc_service
-        .close_position(request)
-        .await;
+        .close_position(request, &ctx.telemetry_context)
+        .await
+        .unwrap();
 
     println!("grpc_response: {:?}", grpc_response);
 

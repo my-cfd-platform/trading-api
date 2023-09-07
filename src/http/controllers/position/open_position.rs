@@ -4,7 +4,7 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    map_http_to_grpc_open_position, trading_executor::TradingExecutorOperationsCodes,
+    map_http_to_grpc_open_position, trading_executor_grpc::TradingExecutorOperationsCodes,
     AppContext, OpenPositionHttpRequest, OpenPositionHttpResponse,
 };
 
@@ -41,8 +41,9 @@ async fn handle_request(
     let grpc_response = action
         .app
         .trading_executor_grpc_service
-        .open_position(request)
-        .await;
+        .open_position(request, &ctx.telemetry_context)
+        .await
+        .unwrap();
 
     println!("grpc_response: {:?}", grpc_response);
 

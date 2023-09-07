@@ -1,11 +1,11 @@
 mod app;
-mod http;
 mod grpc_clients;
-
-pub mod trading_executor {
-    tonic::include_proto!("trading_executor");
-}
+mod http;
 
 pub use app::*;
-pub use http::*;
 pub use grpc_clients::*;
+pub use http::*;
+
+pub mod trading_executor_grpc {
+    tonic::include_proto!("trading_executor");
+}

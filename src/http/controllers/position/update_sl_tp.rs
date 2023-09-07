@@ -4,7 +4,7 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    trading_executor::{TradingExecutorOperationsCodes, TradingExecutorUpdateSlTpGrpcRequest},
+    trading_executor_grpc::{TradingExecutorOperationsCodes, TradingExecutorUpdateSlTpGrpcRequest},
     ApiResponseCodes, AppContext, SlTpType, UpdateSlTpHttpRequest, UpdateTpSlHttpResponse,
 };
 
@@ -76,8 +76,9 @@ async fn handle_request(
     let grpc_response = action
         .app
         .trading_executor_grpc_service
-        .update_sl_tp(request)
-        .await;
+        .update_sl_tp(request, &ctx.telemetry_context)
+        .await
+        .unwrap();
 
     let response = match grpc_response.position {
         Some(position) => UpdateTpSlHttpResponse {

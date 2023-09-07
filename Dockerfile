@@ -1,4 +1,4 @@
-FROM rust:slim
+FROM ubuntu:22.04
 COPY ./target/release/trading-api ./target/release/trading-api
 
 ARG app_version

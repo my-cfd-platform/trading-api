@@ -1,5 +1,5 @@
 use crate::{
-    trading_executor::{
+    trading_executor_grpc::{
         TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
         TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
         TradingExecutorPositionSide,

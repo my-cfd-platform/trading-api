@@ -1,3 +1,4 @@
+/*
 use std::{sync::Arc, time::Duration};
 
 use my_grpc_extensions::{GrpcChannel, GrpcClientSettings};
@@ -5,9 +6,26 @@ use tonic::transport::Channel;
 
 use crate::trading_executor::{
     trading_executor_grpc_service_client::TradingExecutorGrpcServiceClient,
-    TradingExecutorActivePositionGrpcModel, TradingExecutorGetActivePositionsGrpcRequest, TradingExecutorOpenPositionGrpcRequest, TradingExecutorOpenPositionGrpcResponse, TradingExecutorClosePositionGrpcRequest, TradingExecutorClosePositionGrpcResponse, TradingExecutorUpdateSlTpGrpcRequest, TradingExecutorUpdateSlTpGrpcResponse,
+    TradingExecutorActivePositionGrpcModel, TradingExecutorClosePositionGrpcRequest,
+    TradingExecutorClosePositionGrpcResponse, TradingExecutorGetActivePositionsGrpcRequest,
+    TradingExecutorOpenPositionGrpcRequest, TradingExecutorOpenPositionGrpcResponse,
+    TradingExecutorUpdateSlTpGrpcRequest, TradingExecutorUpdateSlTpGrpcResponse,
 };
+ */
 
+#[my_grpc_client_macros::generate_grpc_client(
+    proto_file: "./proto/TradingExecutorGrpcService.proto",
+    crate_ns: "crate::trading_executor_grpc",
+    retries: 3,
+    request_timeout_sec: 1,
+    ping_timeout_sec: 1,
+    ping_interval_sec: 3,
+)]
+pub struct TradingExecutorGrpcClient {
+    channel: my_grpc_extensions::GrpcChannel<TGrpcService>,
+}
+
+/*
 struct TradingExecutorSettingsGrpcUrl(String);
 
 impl TradingExecutorSettingsGrpcUrl {
@@ -85,3 +103,4 @@ impl TradingExecutorGrpcClient {
         return vec![];
     }
 }
+ */
