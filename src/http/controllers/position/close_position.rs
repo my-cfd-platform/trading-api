@@ -16,7 +16,7 @@ use crate::{
     route: "/api/trading/v1/Positions/Close",
     summary: "Close position",
     description: "Close client position",
-    controller: "Positions Controller",
+    controller: "Positions",
     input_data: "ClosePositionHttpRequest",
     result:[
         {status_code: 200, description: "Ok response", model: "ClosePositionHttpResponse"},
@@ -46,7 +46,9 @@ async fn handle_request(
         trader_id: trader_id.to_string(),
     };
 
-    println!("request: {:?}", request);
+    if action.app.debug {
+        println!("request: {:?}", request);
+    }
 
     let grpc_response = action
         .app
@@ -55,15 +57,16 @@ async fn handle_request(
         .await
         .unwrap();
 
-    println!("grpc_response: {:?}", grpc_response);
-
+    if action.app.debug {
+        println!("grpc_response: {:?}", grpc_response);
+    }
     let response = match grpc_response.position {
         Some(position) => ClosePositionHttpResponse {
             result: ApiResponseCodes::Ok,
             position: Some(map_closed_grpc_to_api(position, &input_data.account_id)),
         },
         None => {
-            let te_status = TradingExecutorOperationsCodes::from_i32(grpc_response.status).unwrap();
+            let te_status = TradingExecutorOperationsCodes::try_from(grpc_response.status).unwrap();
 
             ClosePositionHttpResponse {
                 result: te_status.into(),

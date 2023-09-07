@@ -13,7 +13,7 @@ use crate::{
     route: "/api/trading/v1/Positions/UpdateTpSl",
     summary: "Update sl tp",
     description: "Update position sl tp",
-    controller: "Positions Controller",
+    controller: "Positions",
     input_data: "UpdateSlTpHttpRequest",
     result:[
         {status_code: 200, description: "Ok response", model: "UpdateTpSlHttpResponse"},
@@ -86,7 +86,7 @@ async fn handle_request(
             position: Some(position.into()),
         },
         None => {
-            let te_status = TradingExecutorOperationsCodes::from_i32(grpc_response.status).unwrap();
+            let te_status = TradingExecutorOperationsCodes::try_from(grpc_response.status).unwrap();
 
             UpdateTpSlHttpResponse {
                 result: te_status.into(),

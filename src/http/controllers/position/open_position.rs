@@ -13,8 +13,9 @@ use crate::{
     route: "/api/trading/v1/Positions/Open",
     summary: "Open position",
     description: "Open client position",
-    controller: "Positions Controller",
+    controller: "Positions",
     input_data: "OpenPositionHttpRequest",
+    authorized: ["KYC"], 
     result:[
         {status_code: 200, description: "Ok response", model: "OpenPositionHttpResponse"},
     ]
@@ -37,7 +38,10 @@ async fn handle_request(
     let trader_id = ctx.get_client_id().unwrap();
 
     let request = map_http_to_grpc_open_position(&input_data, trader_id);
-    println!("grpc_request: {:?}", request);
+
+    if action.app.debug {
+        println!("grpc_request: {:?}", request);
+    }
     let grpc_response = action
         .app
         .trading_executor_grpc_service
@@ -45,7 +49,9 @@ async fn handle_request(
         .await
         .unwrap();
 
-    println!("grpc_response: {:?}", grpc_response);
+    if action.app.debug {
+        println!("grpc_response: {:?}", grpc_response);
+    }
 
     let response = match grpc_response.positon {
         Some(position) => OpenPositionHttpResponse {
@@ -54,7 +60,7 @@ async fn handle_request(
         },
         None => {
             let status: Option<TradingExecutorOperationsCodes> =
-                TradingExecutorOperationsCodes::from_i32(grpc_response.status);
+                TradingExecutorOperationsCodes::try_from(grpc_response.status).ok();
 
             OpenPositionHttpResponse {
                 result: status.unwrap().into(),

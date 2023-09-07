@@ -19,7 +19,7 @@ impl Into<PositionSide> for TradingExecutorPositionSide {
 
 impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
     fn into(self) -> ActivePositionApiModel {
-        let side = TradingExecutorPositionSide::from_i32(self.side).unwrap();
+        let side = TradingExecutorPositionSide::try_from(self.side).unwrap();
 
         let mut model = ActivePositionApiModel {
             id: self.id,

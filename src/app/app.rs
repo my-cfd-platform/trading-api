@@ -14,6 +14,7 @@ pub struct AppContext {
     pub my_no_sql_connection: MyNoSqlTcpConnection,
     pub app_states: Arc<AppStates>,
     pub trading_executor_grpc_service: Arc<TradingExecutorGrpcClient>,
+    pub debug: bool,
 }
 
 impl AppContext {
@@ -30,6 +31,7 @@ impl AppContext {
             trading_executor_grpc_service: Arc::new(TradingExecutorGrpcClient::new(
                 settings_reader.clone(),
             )),
+            debug: std::env::var("DEBUG").is_ok(),
         }
     }
 }
