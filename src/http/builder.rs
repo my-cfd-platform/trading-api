@@ -26,5 +26,9 @@ pub fn build_controllers(app: &Arc<AppContext>) -> ControllersMiddleware {
         super::positions::ClosePositionControllerHttpAction::new(app.clone()),
     ));
 
+    result.register_post_action(Arc::new(super::orders::SetPendingOrderAction::new(
+        app.clone(),
+    )));
+
     result
 }

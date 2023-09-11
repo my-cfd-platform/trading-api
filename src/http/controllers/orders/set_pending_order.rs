@@ -1,12 +1,9 @@
 use std::sync::Arc;
 
-use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
+use my_http_server::{HttpContext, HttpFailResult, HttpOkResult};
 use rest_api_wl_shared::GetClientId;
 
-use crate::{
-    map_http_to_grpc_open_position, trading_executor_grpc::TradingExecutorOperationsCodes,
-    AppContext, OpenPositionHttpRequest, OpenPositionHttpResponse,
-};
+use crate::AppContext;
 
 #[my_http_server_swagger::http_route(
     method: "POST",
@@ -16,21 +13,21 @@ use crate::{
     controller: "Orders",
     authorized: ["KYC"],
     result:[
-        {status_code: 200, description: "Ok response", model: "OpenPositionHttpResponse"},
+        {status_code: 200, description: "Ok response"},
     ]
 )]
-pub struct OpenPositionControllerHttpAction {
+pub struct SetPendingOrderAction {
     app: Arc<AppContext>,
 }
 
-impl OpenPositionControllerHttpAction {
+impl SetPendingOrderAction {
     pub fn new(app: Arc<AppContext>) -> Self {
         Self { app }
     }
 }
 
 async fn handle_request(
-    action: &OpenPositionControllerHttpAction,
+    action: &SetPendingOrderAction,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
     let trader_id = ctx.get_client_id().unwrap();
