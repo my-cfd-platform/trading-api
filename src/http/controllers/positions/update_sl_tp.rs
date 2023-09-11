@@ -5,8 +5,10 @@ use rest_api_wl_shared::GetClientId;
 
 use crate::{
     trading_executor_grpc::{TradingExecutorOperationsCodes, TradingExecutorUpdateSlTpGrpcRequest},
-    ApiResponseCodes, AppContext, SlTpType, UpdateSlTpHttpRequest, UpdateTpSlHttpResponse,
+    ApiResponseCodes, AppContext,
 };
+
+use super::*;
 
 #[my_http_server_swagger::http_route(
     method: "POST",

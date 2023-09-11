@@ -1,9 +1,6 @@
 use std::sync::Arc;
 
-use crate::{
-    AppContext, ClosePositionControllerHttpAction, OpenPositionControllerHttpAction,
-    UpdateSlTpControllerHttpAction,
-};
+use crate::AppContext;
 use my_http_server_controllers::controllers::{
     ControllersAuthorization, ControllersMiddleware, RequiredClaims,
 };
@@ -19,11 +16,15 @@ pub fn build_controllers(app: &Arc<AppContext>) -> ControllersMiddleware {
         Some(Arc::new(AuthFailResponseFactory)),
     );
 
-    result.register_post_action(Arc::new(OpenPositionControllerHttpAction::new(app.clone())));
-    result.register_post_action(Arc::new(UpdateSlTpControllerHttpAction::new(app.clone())));
-    result.register_post_action(Arc::new(ClosePositionControllerHttpAction::new(
+    result.register_post_action(Arc::new(super::positions::OpenPositionHttpAction::new(
         app.clone(),
     )));
+    result.register_post_action(Arc::new(
+        super::positions::UpdateSlTpControllerHttpAction::new(app.clone()),
+    ));
+    result.register_post_action(Arc::new(
+        super::positions::ClosePositionControllerHttpAction::new(app.clone()),
+    ));
 
     result
 }

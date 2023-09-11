@@ -8,8 +8,10 @@ use crate::{
     trading_executor_grpc::{
         TradingExecutorClosePositionGrpcRequest, TradingExecutorOperationsCodes,
     },
-    ApiResponseCodes, AppContext, ClosePositionHttpRequest, ClosePositionHttpResponse,
+    ApiResponseCodes, AppContext,
 };
+
+use super::*;
 
 #[my_http_server_swagger::http_route(
     method: "POST",

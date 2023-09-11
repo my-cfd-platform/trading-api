@@ -1,7 +1,9 @@
 use my_http_server_swagger::{MyHttpInput, MyHttpObjectStructure};
 use serde::{Deserialize, Serialize};
 
-use crate::{ActivePositionApiModel, ApiResponseCodes, SlTpType};
+use crate::ApiResponseCodes;
+
+use super::*;
 
 #[derive(MyHttpInput)]
 pub struct UpdateSlTpHttpRequest {

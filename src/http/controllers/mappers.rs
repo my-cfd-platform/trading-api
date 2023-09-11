@@ -1,11 +1,11 @@
 use crate::{
+    positions::*,
     trading_executor_grpc::{
         TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
         TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
         TradingExecutorPositionSide,
     },
-    ActivePositionApiModel, ApiResponseCodes, ClosedPositionApiModel, OpenPositionHttpRequest,
-    PositionSide, SlTpType,
+    ApiResponseCodes,
 };
 
 impl Into<PositionSide> for TradingExecutorPositionSide {

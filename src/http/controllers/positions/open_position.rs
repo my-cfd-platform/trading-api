@@ -5,10 +5,10 @@ use rest_api_wl_shared::GetClientId;
 
 use crate::{
     map_http_to_grpc_open_position, trading_executor_grpc::TradingExecutorOperationsCodes,
-    AppContext, OpenPositionHttpRequest, OpenPositionHttpResponse,
+    AppContext,
 };
 
-//    authorized: ["KYC"],
+use super::*;
 
 #[my_http_server_swagger::http_route(
     method: "POST",
@@ -17,23 +17,23 @@ use crate::{
     description: "Open client position",
     controller: "Positions",
     input_data: "OpenPositionHttpRequest",
-
+    authorized: ["KYC"],
     result:[
         {status_code: 200, description: "Ok response", model: "OpenPositionHttpResponse"},
     ]
 )]
-pub struct OpenPositionControllerHttpAction {
+pub struct OpenPositionHttpAction {
     app: Arc<AppContext>,
 }
 
-impl OpenPositionControllerHttpAction {
+impl OpenPositionHttpAction {
     pub fn new(app: Arc<AppContext>) -> Self {
         Self { app }
     }
 }
 
 async fn handle_request(
-    action: &OpenPositionControllerHttpAction,
+    action: &OpenPositionHttpAction,
     input_data: OpenPositionHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
