@@ -8,6 +8,8 @@ use crate::{
     AppContext, OpenPositionHttpRequest, OpenPositionHttpResponse,
 };
 
+//    authorized: ["KYC"],
+
 #[my_http_server_swagger::http_route(
     method: "POST",
     route: "/api/trading/v1/Positions/Open",
@@ -15,7 +17,7 @@ use crate::{
     description: "Open client position",
     controller: "Positions",
     input_data: "OpenPositionHttpRequest",
-    authorized: ["KYC"], 
+
     result:[
         {status_code: 200, description: "Ok response", model: "OpenPositionHttpResponse"},
     ]
