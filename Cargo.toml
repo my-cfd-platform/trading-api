@@ -33,7 +33,6 @@ my-grpc-client-macros = { tag = "0.1.0", git = "https://github.com/MyJetTools/my
 my-telemetry = { tag = "0.3.0", git = "https://github.com/MyJetTools/my-telemetry.git" }
 my-telemetry-writer = { tag = "0.3.0", git = "https://github.com/MyJetTools/my-telemetry-writer.git" }
 
-
 async-trait = "*"
 prost = "*"
 prost-types = "*"

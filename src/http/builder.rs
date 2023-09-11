@@ -1,9 +1,13 @@
 use std::sync::Arc;
 
-use crate::{AppContext, ClosePositionControllerHttpAction, OpenPositionControllerHttpAction, UpdateSlTpControllerHttpAction};
+use crate::{
+    AppContext, ClosePositionControllerHttpAction, OpenPositionControllerHttpAction,
+    UpdateSlTpControllerHttpAction,
+};
 use my_http_server_controllers::controllers::{
     ControllersAuthorization, ControllersMiddleware, RequiredClaims,
 };
+use rest_api_wl_shared::middlewares::AuthFailResponseFactory;
 
 pub fn build_controllers(app: &Arc<AppContext>) -> ControllersMiddleware {
     let mut result = ControllersMiddleware::new(
@@ -12,7 +16,7 @@ pub fn build_controllers(app: &Arc<AppContext>) -> ControllersMiddleware {
             global_claims: RequiredClaims::no_claims(),
         }
         .into(),
-        None,
+        Some(Arc::new(AuthFailResponseFactory)),
     );
 
     result.register_post_action(Arc::new(OpenPositionControllerHttpAction::new(app.clone())));
