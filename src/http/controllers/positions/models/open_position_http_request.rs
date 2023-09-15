@@ -1,4 +1,4 @@
-use my_http_server_swagger::{MyHttpInput, MyHttpIntegerEnum, MyHttpObjectStructure};
+use my_http::macros::{MyHttpInput, MyHttpIntegerEnum, MyHttpObjectStructure};
 use serde::{Deserialize, Serialize};
 use serde_repr::{Serialize_repr, Deserialize_repr};
 

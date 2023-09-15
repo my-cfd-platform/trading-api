@@ -1,10 +1,11 @@
+use crate::trading_executor_grpc::{
+    TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
+    TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
+    TradingExecutorPositionSide,
+};
+
 use crate::{
     positions::*,
-    trading_executor_grpc::{
-        TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
-        TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
-        TradingExecutorPositionSide,
-    },
     ApiResponseCodes,
 };
 

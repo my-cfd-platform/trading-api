@@ -1,8 +1,8 @@
 use std::{net::SocketAddr, sync::Arc};
 
-use is_alive_middleware::IsAliveMiddleware;
-use my_http_server::MyHttpServer;
-use my_http_server_controllers::swagger::SwaggerMiddleware;
+use my_http::is_alive::IsAliveMiddleware;
+use my_http::core::MyHttpServer;
+use my_http::controllers::swagger::SwaggerMiddleware;
 use rest_api_wl_shared::middlewares::AuthMiddleware;
 
 use crate::app::AppContext;

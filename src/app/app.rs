@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use my_no_sql_tcp_reader::{MyNoSqlDataReader, MyNoSqlTcpConnection};
+use service_sdk::my_no_sql::reader::{MyNoSqlDataReader, MyNoSqlTcpConnection, MyNoSqlDataReaderTcp};
 use rest_api_wl_shared::middlewares::SessionEntity;
 use rust_extensions::AppStates;
 
@@ -10,7 +10,7 @@ pub const APP_VERSION: &'static str = env!("CARGO_PKG_VERSION");
 pub const APP_NAME: &'static str = env!("CARGO_PKG_NAME");
 
 pub struct AppContext {
-    pub sessions_ns_reader: Arc<MyNoSqlDataReader<SessionEntity>>,
+    pub sessions_ns_reader: Arc<MyNoSqlDataReaderTcp<SessionEntity>>,
     pub my_no_sql_connection: MyNoSqlTcpConnection,
     pub app_states: Arc<AppStates>,
     pub trading_executor_grpc_service: Arc<TradingExecutorGrpcClient>,
@@ -19,7 +19,7 @@ pub struct AppContext {
 
 impl AppContext {
     pub async fn new(settings_reader: Arc<SettingsReader>) -> Self {
-        let my_no_sql_connection = my_no_sql_tcp_reader::MyNoSqlTcpConnection::new(
+        let my_no_sql_connection = service_sdk::my_no_sql::reader::MyNoSqlTcpConnection::new(
             format!("{}:{}", crate::app::APP_NAME, crate::app::APP_VERSION),
             settings_reader.clone(),
         );

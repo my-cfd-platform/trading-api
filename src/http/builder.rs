@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use crate::AppContext;
-use my_http_server_controllers::controllers::{
+use my_http::controllers::controllers::{
     ControllersAuthorization, ControllersMiddleware, RequiredClaims,
 };
 use rest_api_wl_shared::middlewares::AuthFailResponseFactory;

@@ -1,4 +1,4 @@
-use my_http_server_swagger::MyHttpIntegerEnum;
+use my_http::macros::MyHttpIntegerEnum;
 use serde_repr::{Serialize_repr, Deserialize_repr};
 
 #[derive(Clone, Copy, Serialize_repr, Deserialize_repr, Debug, MyHttpIntegerEnum)]

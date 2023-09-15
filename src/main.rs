@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use my_logger::MyLogger;
-use my_seq_logger::SeqLogger;
+use my_logger::{my_seq_logger::SeqLogger, MyLogger};
 use trading_api::{setup_server, AppContext, SettingsReader, APP_NAME, APP_VERSION};
 
 #[tokio::main]
@@ -15,8 +14,10 @@ async fn main() {
         .populate_app_and_version(APP_NAME, APP_VERSION)
         .await;
 
-    let telemetry_writer =
-        my_telemetry_writer::MyTelemetryWriter::new(APP_NAME.to_string(), settings_reader.clone());
+    let telemetry_writer = my_telemetry::my_telemetry_writer::MyTelemetryWriter::new(
+        APP_NAME.to_string(),
+        settings_reader.clone(),
+    );
 
     let app = AppContext::new(settings_reader).await;
 

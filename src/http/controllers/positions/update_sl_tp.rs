@@ -1,16 +1,17 @@
 use std::sync::Arc;
 
-use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
+use my_http::core::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
-use crate::{
-    trading_executor_grpc::{TradingExecutorOperationsCodes, TradingExecutorUpdateSlTpGrpcRequest},
-    ApiResponseCodes, AppContext,
+use crate::{ApiResponseCodes, AppContext};
+
+use crate::trading_executor_grpc::{
+    TradingExecutorOperationsCodes, TradingExecutorUpdateSlTpGrpcRequest,
 };
 
 use super::*;
 
-#[my_http_server_swagger::http_route(
+#[my_http::macros::http_route(
     method: "POST",
     route: "/api/trading/v1/Positions/UpdateTpSl",
     summary: "Update sl tp",

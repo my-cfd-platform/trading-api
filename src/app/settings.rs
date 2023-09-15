@@ -1,4 +1,4 @@
-use my_no_sql_tcp_reader::MyNoSqlTcpConnectionSettings;
+use service_sdk::my_no_sql::reader::MyNoSqlTcpConnectionSettings;
 use my_settings_reader::SettingsModel;
 use serde::{Deserialize, Serialize};
 
@@ -28,7 +28,7 @@ impl MyNoSqlTcpConnectionSettings for SettingsReader {
 }
 
 #[async_trait::async_trait]
-impl my_telemetry_writer::MyTelemetrySettings for SettingsReader {
+impl service_sdk::my_telemetry::my_telemetry_writer::MyTelemetrySettings for SettingsReader {
     async fn get_telemetry_url(&self) -> String {
         let read_access = self.settings.read().await;
         read_access.my_telemetry.clone()
@@ -36,7 +36,7 @@ impl my_telemetry_writer::MyTelemetrySettings for SettingsReader {
 }
 
 #[async_trait::async_trait]
-impl my_seq_logger::SeqSettings for SettingsReader {
+impl service_sdk::my_logger::my_seq_logger::SeqSettings for SettingsReader {
     async fn get_conn_string(&self) -> String {
         let read_access = self.settings.read().await;
         read_access.seq_conn_string.clone()
