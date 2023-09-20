@@ -1,17 +1,18 @@
 use std::sync::Arc;
 
-use my_http::core::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
+use rest_api_wl_shared::GetClientId;
+use service_sdk::my_http_server;
+use service_sdk::my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 
+use crate::app::AppContext;
+use crate::http::{ApiResponseCodes, map_closed_grpc_to_api};
 use crate::trading_executor_grpc::{
     TradingExecutorClosePositionGrpcRequest, TradingExecutorOperationsCodes,
 };
-use rest_api_wl_shared::GetClientId;
-
-use crate::{map_closed_grpc_to_api, ApiResponseCodes, AppContext};
 
 use super::*;
 
-#[my_http::macros::http_route(
+#[service_sdk::my_http_server::macros::http_route(
     method: "POST",
     route: "/api/trading/v1/Positions/Close",
     summary: "Close position",

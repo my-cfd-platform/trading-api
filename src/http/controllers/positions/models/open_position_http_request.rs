@@ -1,8 +1,10 @@
-use my_http::macros::{MyHttpInput, MyHttpIntegerEnum, MyHttpObjectStructure};
+use service_sdk::my_http_server::macros::{MyHttpInput, MyHttpIntegerEnum, MyHttpObjectStructure};
 use serde::{Deserialize, Serialize};
+use service_sdk::my_http_server;
 use serde_repr::{Serialize_repr, Deserialize_repr};
 
-use crate::ApiResponseCodes;
+use crate::http::ApiResponseCodes;
+
 
 #[derive(Clone, Copy, Serialize_repr, Debug, Deserialize_repr, MyHttpIntegerEnum)]
 #[repr(u8)]

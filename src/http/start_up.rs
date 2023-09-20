@@ -1,35 +1,22 @@
-use std::{net::SocketAddr, sync::Arc};
+use std::sync::Arc;
 
-use my_http::is_alive::IsAliveMiddleware;
-use my_http::core::MyHttpServer;
-use my_http::controllers::swagger::SwaggerMiddleware;
-use rest_api_wl_shared::middlewares::AuthMiddleware;
+use rest_api_wl_shared::middlewares::{AuthFailResponseFactory, AuthMiddleware};
+use service_sdk::HttpServerBuilder;
 
 use crate::app::AppContext;
 
-pub fn setup_server(app: Arc<AppContext>, port: u16) {
-    let mut http_server = MyHttpServer::new(SocketAddr::from(([0, 0, 0, 0], port)));
+pub fn setup_server(app: Arc<AppContext>, builder: &mut HttpServerBuilder) {
+    builder.set_auth_error_factory(AuthFailResponseFactory);
 
-    let controllers = Arc::new(super::builder::build_controllers(&app));
-
-    let swagger_middleware = SwaggerMiddleware::new(
-        controllers.clone(),
-        crate::app::APP_NAME.to_string(),
-        crate::app::APP_VERSION.to_string(),
-    );
-
-    http_server.add_middleware(Arc::new(IsAliveMiddleware::new(
-        crate::app::APP_NAME.to_string(),
-        crate::app::APP_VERSION.to_string(),
-    )));
-
-    http_server.add_middleware(Arc::new(swagger_middleware));
-
-    http_server.add_middleware(Arc::new(AuthMiddleware::new(
+    builder.add_auth_middleware(Arc::new(AuthMiddleware::new(
         app.sessions_ns_reader.clone(),
     )));
-
-    http_server.add_middleware(controllers);
-
-    http_server.start(app.app_states.clone(), my_logger::LOGGER.clone());
+    builder.register_post_action(super::positions::OpenPositionHttpAction::new(app.clone()));
+    builder.register_post_action(super::positions::UpdateSlTpControllerHttpAction::new(
+        app.clone(),
+    ));
+    builder.register_post_action(super::positions::ClosePositionControllerHttpAction::new(
+        app.clone(),
+    ));
+    builder.register_post_action(super::orders::SetPendingOrderAction::new(app.clone()));
 }

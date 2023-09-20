@@ -1,32 +1,22 @@
 use std::sync::Arc;
 
-use service_sdk::my_no_sql::reader::{MyNoSqlDataReader, MyNoSqlTcpConnection, MyNoSqlDataReaderTcp};
 use rest_api_wl_shared::middlewares::SessionEntity;
 use rust_extensions::AppStates;
+use service_sdk::{my_no_sql_sdk::reader::MyNoSqlDataReader, ServiceContext};
 
-use crate::{SettingsReader, TradingExecutorGrpcClient};
-
-pub const APP_VERSION: &'static str = env!("CARGO_PKG_VERSION");
-pub const APP_NAME: &'static str = env!("CARGO_PKG_NAME");
+use crate::{grpc_clients::TradingExecutorGrpcClient, settings::SettingsReader};
 
 pub struct AppContext {
-    pub sessions_ns_reader: Arc<MyNoSqlDataReaderTcp<SessionEntity>>,
-    pub my_no_sql_connection: MyNoSqlTcpConnection,
+    pub sessions_ns_reader: Arc<dyn MyNoSqlDataReader<SessionEntity> + Send + Sync>,
     pub app_states: Arc<AppStates>,
     pub trading_executor_grpc_service: Arc<TradingExecutorGrpcClient>,
     pub debug: bool,
 }
 
 impl AppContext {
-    pub async fn new(settings_reader: Arc<SettingsReader>) -> Self {
-        let my_no_sql_connection = service_sdk::my_no_sql::reader::MyNoSqlTcpConnection::new(
-            format!("{}:{}", crate::app::APP_NAME, crate::app::APP_VERSION),
-            settings_reader.clone(),
-        );
-
+    pub async fn new(settings_reader: Arc<SettingsReader>, service_ctx: &ServiceContext) -> Self {
         Self {
-            sessions_ns_reader: my_no_sql_connection.get_reader().await,
-            my_no_sql_connection,
+            sessions_ns_reader: service_ctx.get_ns_reader().await,
             app_states: Arc::new(AppStates::create_initialized()),
             trading_executor_grpc_service: Arc::new(TradingExecutorGrpcClient::new(
                 settings_reader.clone(),

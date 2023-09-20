@@ -4,10 +4,8 @@ use crate::trading_executor_grpc::{
     TradingExecutorPositionSide,
 };
 
-use crate::{
-    positions::*,
-    ApiResponseCodes,
-};
+use super::{positions::{PositionSide, ActivePositionApiModel, SlTpType, ClosedPositionApiModel, OpenPositionHttpRequest}, ApiResponseCodes};
+
 
 impl Into<PositionSide> for TradingExecutorPositionSide {
     fn into(self) -> PositionSide {
@@ -202,33 +200,5 @@ impl Into<ApiResponseCodes> for TradingExecutorOperationsCodes {
             }
             TradingExecutorOperationsCodes::ABookReject => ApiResponseCodes::ExecutionReject,
         }
-    }
-}
-
-pub fn map_trading_executor_error_into_http_error(trading_executor_error: i32) -> ApiResponseCodes {
-    match trading_executor_error {
-        0 => ApiResponseCodes::Ok,
-        1 => ApiResponseCodes::DayOff,
-        2 => ApiResponseCodes::MinOperationLotViolated,
-        3 => ApiResponseCodes::MaxOperationLotViolated,
-        4 => ApiResponseCodes::MaxPositionByInstrumentViolated,
-        5 => ApiResponseCodes::MaxPositionByInstrumentViolated,
-        6 => ApiResponseCodes::NotEnoughBalance,
-        7 => ApiResponseCodes::NoLiquidity,
-        8 => ApiResponseCodes::PositionNotFound,
-        9 => ApiResponseCodes::TpIsTooClose,
-        10 => ApiResponseCodes::SlIsTooClose,
-        11 => ApiResponseCodes::AccountNotFound,
-        12 => ApiResponseCodes::InstrumentNotFound,
-        13 => ApiResponseCodes::TradingDisabled,
-        14 => ApiResponseCodes::MaxAmountPendingOrders,
-        15 => ApiResponseCodes::TechnicalError,
-        16 => ApiResponseCodes::MultiplierNotFound,
-        17 => ApiResponseCodes::TradingDisabled,
-        18 => ApiResponseCodes::MaxOpenPositionsAmount,
-        19 => ApiResponseCodes::TechnicalError,
-        20 => ApiResponseCodes::TechnicalError,
-        21 => ApiResponseCodes::NotEnoughBalance,
-        _ => panic!("Unknown error code"),
     }
 }

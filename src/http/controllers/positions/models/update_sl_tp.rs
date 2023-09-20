@@ -1,7 +1,8 @@
-use my_http::macros::{MyHttpInput, MyHttpObjectStructure};
 use serde::{Deserialize, Serialize};
+use service_sdk::my_http_server;
+use service_sdk::my_http_server::macros::{MyHttpInput, MyHttpObjectStructure};
 
-use crate::ApiResponseCodes;
+use crate::http::ApiResponseCodes;
 
 use super::*;
 

@@ -1,11 +1,12 @@
 use std::sync::Arc;
 
-use my_http::core::{HttpContext, HttpFailResult, HttpOkResult};
 use rest_api_wl_shared::GetClientId;
+use service_sdk::my_http_server;
+use my_http_server::{HttpContext, HttpFailResult, HttpOkResult};
 
-use crate::AppContext;
+use crate::app::AppContext;
 
-#[my_http::macros::http_route(
+#[service_sdk::my_http_server::macros::http_route(
     method: "POST",
     route: "/api/trading/v1/Orders/Set",
     summary: "Set pending Order",
