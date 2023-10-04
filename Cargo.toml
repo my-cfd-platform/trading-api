@@ -13,7 +13,7 @@ rust-extensions = { tag = "0.1.3", git = "https://github.com/MyJetTools/rust-ext
 service-sdk = { git = "https://github.com/MyJetTools/service-sdk", tag = "0.2.3", features = [
     "macros",
     "grpc",
-    "my-nosql-sdk-data-reader",
+    "my-nosql-data-reader-sdk",
 ] }
 async-trait = "*"
 serde = "*"

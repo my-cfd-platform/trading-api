@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use service_sdk::my_grpc_extensions::GrpcClientSettings;
 
 use crate::grpc_clients::TradingExecutorGrpcClient;
 service_sdk::macros::use_settings!();

@@ -6,42 +6,48 @@ use service_sdk::my_http_server::{self, HttpOutput};
 
 use crate::{
     app::AppContext,
-    http::{map_http_to_grpc_open_pending, orders::OpenPendingPositionHttpResponse},
-    trading_executor_grpc::TradingExecutorOperationsCodes,
+    http::orders::CancelPendingPositionHttpResponse,
+    trading_executor_grpc::{
+        TradingExecutorCancelPendingGrpcRequest, TradingExecutorOperationsCodes,
+    },
 };
 
-use super::OpenLimitPositionHttpRequest;
+use super::CancelPendingPositionHttpRequest;
 
 #[service_sdk::my_http_server::macros::http_route(
     method: "POST",
-    route: "/api/trading/v1/PendingOrders/Set",
-    summary: "Set pending Order",
-    description: "Set pending order",
-    input_data: "OpenLimitPositionHttpRequest",
+    route: "/api/trading/v1/PendingOrders/Cancel",
+    summary: "Cancel pending Order",
+    description: "Cancel pending order",
+    input_data: "CancelPendingPositionHttpRequest",
     controller: "Orders",
     authorized: ["KYC"],
     result:[
-        {status_code: 200, description: "Ok response", model: "OpenPendingPositionHttpResponse"},
+        {status_code: 200, description: "Ok response", model: "CancelPendingPositionHttpResponse"},
     ]
 )]
-pub struct SetPendingOrderAction {
+pub struct CancelPendingOrderAction {
     app: Arc<AppContext>,
 }
 
-impl SetPendingOrderAction {
+impl CancelPendingOrderAction {
     pub fn new(app: Arc<AppContext>) -> Self {
         Self { app }
     }
 }
 
 async fn handle_request(
-    action: &SetPendingOrderAction,
-    input_data: OpenLimitPositionHttpRequest,
+    action: &CancelPendingOrderAction,
+    input_data: CancelPendingPositionHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
     let trader_id = ctx.get_client_id().unwrap();
 
-    let request = map_http_to_grpc_open_pending(&input_data, trader_id);
+    let request = TradingExecutorCancelPendingGrpcRequest {
+        account_id: input_data.account_id,
+        trader_id: trader_id.to_string(),
+        position_id: input_data.position_id,
+    };
 
     if action.app.debug {
         println!("grpc_request: {:?}", request);
@@ -49,7 +55,7 @@ async fn handle_request(
     let grpc_response = action
         .app
         .trading_executor_grpc_service
-        .set_pending_position(request, &ctx.telemetry_context)
+        .cancel_pending_position(request, &ctx.telemetry_context)
         .await
         .unwrap();
 
@@ -58,7 +64,7 @@ async fn handle_request(
     }
 
     let response = match grpc_response.position {
-        Some(position) => OpenPendingPositionHttpResponse {
+        Some(position) => CancelPendingPositionHttpResponse {
             result: grpc_response.status.into(),
             position: Some(position.into()),
         },
@@ -66,7 +72,7 @@ async fn handle_request(
             let status: Option<TradingExecutorOperationsCodes> =
                 TradingExecutorOperationsCodes::try_from(grpc_response.status).ok();
 
-            OpenPendingPositionHttpResponse {
+            CancelPendingPositionHttpResponse {
                 result: status.unwrap().into(),
                 position: None,
             }

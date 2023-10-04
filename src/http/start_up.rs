@@ -19,4 +19,5 @@ pub fn setup_server(app: Arc<AppContext>, builder: &mut HttpServerBuilder) {
         app.clone(),
     ));
     builder.register_post_action(super::orders::SetPendingOrderAction::new(app.clone()));
+    builder.register_post_action(super::orders::CancelPendingOrderAction::new(app.clone()));
 }

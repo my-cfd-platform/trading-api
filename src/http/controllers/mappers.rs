@@ -1,10 +1,10 @@
 use crate::trading_executor_grpc::{
     TradingExecutorActivePositionGrpcModel, TradingExecutorClosedPositionGrpcModel,
     TradingExecutorOpenPositionGrpcRequest, TradingExecutorOperationsCodes,
-    TradingExecutorPositionSide,
+    TradingExecutorPositionSide, TradingExecutorOpenPendingGrpcRequest, TradingExecutorPendingPositionGrpcModel,
 };
 
-use super::{positions::{PositionSide, ActivePositionApiModel, SlTpType, ClosedPositionApiModel, OpenPositionHttpRequest}, ApiResponseCodes};
+use super::{positions::{PositionSide, ActivePositionApiModel, SlTpType, ClosedPositionApiModel, OpenPositionHttpRequest}, ApiResponseCodes, orders::{OpenLimitPositionHttpRequest, PendingPositionApiModel}};
 
 
 impl Into<PositionSide> for TradingExecutorPositionSide {
@@ -32,6 +32,47 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
             sl: None,
             tp_type: None,
             sl_type: None,
+        };
+
+        if self.sl_in_asset_price.is_some() {
+            model.sl_type = Some(SlTpType::Currency);
+            model.sl = self.sl_in_asset_price;
+        };
+
+        if self.sl_in_profit.is_some() {
+            model.sl_type = Some(SlTpType::Percent);
+            model.sl = self.sl_in_profit;
+        };
+
+        if self.tp_in_asset_price.is_some() {
+            model.tp_type = Some(SlTpType::Currency);
+            model.tp = self.tp_in_asset_price;
+        };
+
+        if self.tp_in_profit.is_some() {
+            model.tp_type = Some(SlTpType::Percent);
+            model.tp = self.tp_in_profit;
+        };
+
+        return model;
+    }
+}
+
+impl Into<PendingPositionApiModel> for TradingExecutorPendingPositionGrpcModel {
+    fn into(self) -> PendingPositionApiModel {
+        let side = TradingExecutorPositionSide::try_from(self.side).unwrap();
+
+        let mut model = PendingPositionApiModel {
+            id: self.id,
+            account_id: self.account_id,
+            instrument: self.asset_pair,
+            invest_amount: self.invest_amount,
+            operation: side.into(),
+            tp: None,
+            sl: None,
+            tp_type: None,
+            sl_type: None,
+            desire_price: self.desire_price,
         };
 
         if self.sl_in_asset_price.is_some() {
@@ -120,6 +161,52 @@ pub fn map_http_to_grpc_open_position(
         sl_in_asset_price: None,
         account_id: open_http_request.account_id.clone(),
         trader_id: trader_id.to_string(),
+    };
+
+    if open_http_request.tp_type.is_some() {
+        match open_http_request.tp_type.unwrap() {
+            SlTpType::Currency => {
+                open_request.tp_in_asset_price = open_http_request.tp;
+            }
+            SlTpType::Percent => {
+                open_request.tp_in_profit = open_http_request.tp;
+            }
+            SlTpType::Price => panic!("Price not implemented"),
+        };
+    };
+
+    if open_http_request.sl_type.is_some() {
+        match open_http_request.sl_type.unwrap() {
+            SlTpType::Currency => {
+                open_request.sl_in_asset_price = open_http_request.sl;
+            }
+            SlTpType::Percent => {
+                open_request.sl_in_profit = open_http_request.sl;
+            }
+            SlTpType::Price => panic!("Price not implemented"),
+        };
+    };
+
+    return open_request;
+}
+
+pub fn map_http_to_grpc_open_pending(
+    open_http_request: &OpenLimitPositionHttpRequest,
+    trader_id: &str,
+) -> TradingExecutorOpenPendingGrpcRequest {
+    let mut open_request = TradingExecutorOpenPendingGrpcRequest {
+        asset_pair: open_http_request.instrument_id.clone(),
+        side: open_http_request.operation as i32,
+        invest_amount: open_http_request.invest_amount,
+        leverage: open_http_request.multiplier,
+        process_id: open_http_request.process_id.clone(),
+        tp_in_profit: None,
+        sl_in_profit: None,
+        tp_in_asset_price: None,
+        sl_in_asset_price: None,
+        account_id: open_http_request.account_id.clone(),
+        trader_id: trader_id.to_string(),
+        desire_price: open_http_request.desire_price,
     };
 
     if open_http_request.tp_type.is_some() {
