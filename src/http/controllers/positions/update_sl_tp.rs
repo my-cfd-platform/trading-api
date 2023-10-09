@@ -64,7 +64,7 @@ async fn handle_request(
 
     if input_data.sl_type.is_some() {
         let sl = Some(input_data.sl.unwrap());
-        match input_data.tp_type.unwrap() {
+        match input_data.sl_type.unwrap() {
             SlTpType::Price => {
                 request.sl_in_asset_price = sl;
             }
