@@ -166,24 +166,24 @@ pub fn map_http_to_grpc_open_position(
     if open_http_request.tp_type.is_some() {
         match open_http_request.tp_type.unwrap() {
             SlTpType::Currency => {
-                open_request.tp_in_asset_price = open_http_request.tp;
-            }
-            SlTpType::Percent => {
                 open_request.tp_in_profit = open_http_request.tp;
             }
-            SlTpType::Price => panic!("Price not implemented"),
+            SlTpType::Price => {
+                open_request.tp_in_asset_price = open_http_request.tp;
+            }
+            SlTpType::Percent => panic!("Percent not implemented"),
         };
     };
 
     if open_http_request.sl_type.is_some() {
         match open_http_request.sl_type.unwrap() {
             SlTpType::Currency => {
-                open_request.sl_in_asset_price = open_http_request.sl;
-            }
-            SlTpType::Percent => {
                 open_request.sl_in_profit = open_http_request.sl;
             }
-            SlTpType::Price => panic!("Price not implemented"),
+            SlTpType::Price => {
+                open_request.sl_in_asset_price = open_http_request.sl;
+            }
+            SlTpType::Percent => panic!("Percent not implemented"),
         };
     };
 
