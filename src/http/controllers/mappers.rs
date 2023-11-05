@@ -35,22 +35,22 @@ impl Into<ActivePositionApiModel> for TradingExecutorActivePositionGrpcModel {
         };
 
         if self.sl_in_asset_price.is_some() {
-            model.sl_type = Some(SlTpType::Currency);
+            model.sl_type = Some(SlTpType::Price);
             model.sl = self.sl_in_asset_price;
         };
 
         if self.sl_in_profit.is_some() {
-            model.sl_type = Some(SlTpType::Percent);
+            model.sl_type = Some(SlTpType::Currency);
             model.sl = self.sl_in_profit;
         };
 
         if self.tp_in_asset_price.is_some() {
-            model.tp_type = Some(SlTpType::Currency);
+            model.tp_type = Some(SlTpType::Price);
             model.tp = self.tp_in_asset_price;
         };
 
         if self.tp_in_profit.is_some() {
-            model.tp_type = Some(SlTpType::Percent);
+            model.tp_type = Some(SlTpType::Currency);
             model.tp = self.tp_in_profit;
         };
 
@@ -76,22 +76,22 @@ impl Into<PendingPositionApiModel> for TradingExecutorPendingPositionGrpcModel {
         };
 
         if self.sl_in_asset_price.is_some() {
-            model.sl_type = Some(SlTpType::Currency);
+            model.sl_type = Some(SlTpType::Price);
             model.sl = self.sl_in_asset_price;
         };
 
         if self.sl_in_profit.is_some() {
-            model.sl_type = Some(SlTpType::Percent);
+            model.sl_type = Some(SlTpType::Currency);
             model.sl = self.sl_in_profit;
         };
 
         if self.tp_in_asset_price.is_some() {
-            model.tp_type = Some(SlTpType::Currency);
+            model.tp_type = Some(SlTpType::Price);
             model.tp = self.tp_in_asset_price;
         };
 
         if self.tp_in_profit.is_some() {
-            model.tp_type = Some(SlTpType::Percent);
+            model.tp_type = Some(SlTpType::Currency);
             model.tp = self.tp_in_profit;
         };
 
@@ -118,27 +118,27 @@ pub fn map_closed_grpc_to_api(
         multiplier: response.leverage,
         close_price: response.close_price,
         close_date: response.open_date,
-        swap: 0.0,
+        swap: response.swaps.iter().map(|x| x.amount).sum(),
         commissions: 0.0,
     };
 
     if response.sl_in_asset_price.is_some() {
-        http.sl_type = Some(SlTpType::Currency);
+        http.sl_type = Some(SlTpType::Price);
         http.sl = response.sl_in_asset_price;
     };
 
     if response.sl_in_profit.is_some() {
-        http.sl_type = Some(SlTpType::Percent);
+        http.sl_type = Some(SlTpType::Currency);
         http.sl = response.sl_in_profit;
     };
 
     if response.tp_in_asset_price.is_some() {
-        http.tp_type = Some(SlTpType::Currency);
+        http.tp_type = Some(SlTpType::Price);
         http.tp = response.tp_in_asset_price;
     };
 
     if response.tp_in_profit.is_some() {
-        http.tp_type = Some(SlTpType::Percent);
+        http.tp_type = Some(SlTpType::Currency);
         http.tp = response.tp_in_profit;
     };
 
