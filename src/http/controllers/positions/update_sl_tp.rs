@@ -36,7 +36,7 @@ async fn handle_request(
     input_data: UpdateSlTpHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
-    let trader_id = ctx.get_client_id().unwrap();
+    let trader_id = ctx.get_client_id()?;
 
     let mut request = TradingExecutorUpdateSlTpGrpcRequest {
         position_id: input_data.position_id,

@@ -38,7 +38,7 @@ async fn handle_request(
     input_data: ClosePositionHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
-    let trader_id = ctx.get_client_id().unwrap();
+    let trader_id = ctx.get_client_id()?;
 
     let request = TradingExecutorClosePositionGrpcRequest {
         position_id: input_data.position_id,

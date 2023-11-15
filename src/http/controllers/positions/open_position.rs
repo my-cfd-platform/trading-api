@@ -38,7 +38,7 @@ async fn handle_request(
     input_data: OpenPositionHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
-    let trader_id = ctx.get_client_id().unwrap();
+    let trader_id = ctx.get_client_id()?;
 
     let request = map_http_to_grpc_open_position(&input_data, trader_id);
 

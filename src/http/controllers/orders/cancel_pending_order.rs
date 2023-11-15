@@ -41,7 +41,7 @@ async fn handle_request(
     input_data: CancelPendingPositionHttpRequest,
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
-    let trader_id = ctx.get_client_id().unwrap();
+    let trader_id = ctx.get_client_id()?;
 
     let request = TradingExecutorCancelPendingGrpcRequest {
         account_id: input_data.account_id,
