@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use app::AppContext;
-use http::setup_server;
+use http::register_controllers;
 
 pub mod trading_executor_grpc {
     tonic::include_proto!("trading_executor");
@@ -22,7 +22,12 @@ async fn main() {
     let app_context = Arc::new(AppContext::new(settings_reader.clone(), &service_context).await);
 
     service_context.configure_http_server(|builder| {
-        setup_server(app_context.clone(), builder);
+        rest_api_wl_shared::configure_rest_api_server(
+            builder,
+            app_context.sessions_ns_reader.clone(),
+        );
+
+        register_controllers(app_context.clone(), builder);
     });
 
     service_context.start_application().await;
