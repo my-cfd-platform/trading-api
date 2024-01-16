@@ -4,13 +4,14 @@ use rest_api_wl_shared::middlewares::SessionEntity;
 use rust_extensions::AppStates;
 use service_sdk::{my_no_sql_sdk::reader::MyNoSqlDataReaderTcp, ServiceContext};
 
-use crate::{grpc_clients::TradingExecutorGrpcClient, settings::SettingsReader};
+use crate::{grpc_clients::TradingExecutorGrpcClient, settings::SettingsReader, http::ProcessIdCache};
 
 pub struct AppContext {
     pub sessions_ns_reader: Arc<MyNoSqlDataReaderTcp<SessionEntity>>,
     pub app_states: Arc<AppStates>,
     pub trading_executor_grpc_service: Arc<TradingExecutorGrpcClient>,
     pub debug: bool,
+    pub cache: ProcessIdCache
 }
 
 impl AppContext {
@@ -22,6 +23,7 @@ impl AppContext {
                 settings_reader.clone(),
             )),
             debug: std::env::var("DEBUG").is_ok(),
+            cache: ProcessIdCache::new()
         }
     }
 }

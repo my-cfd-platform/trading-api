@@ -42,6 +42,10 @@ async fn handle_request(
 
     let request = map_http_to_grpc_open_position(&input_data, trader_id);
 
+    if let Some(result) = action.app.cache.get::<OpenPositionHttpResponse>(&input_data.process_id).await{
+        return HttpOutput::as_json(result).into_ok_result(true).into();
+    }
+
     if action.app.debug {
         println!("grpc_request: {:?}", request);
     }
@@ -71,6 +75,8 @@ async fn handle_request(
             }
         }
     };
+
+    action.app.cache.set(&input_data.process_id, response.clone()).await;
 
     return HttpOutput::as_json(response).into_ok_result(true).into();
 }

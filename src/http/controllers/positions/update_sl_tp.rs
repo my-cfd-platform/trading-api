@@ -37,7 +37,9 @@ async fn handle_request(
     ctx: &HttpContext,
 ) -> Result<HttpOkResult, HttpFailResult> {
     let trader_id = ctx.get_client_id()?;
-
+    if let Some(result) = action.app.cache.get::<UpdateTpSlHttpResponse>(&input_data.process_id).await{
+        return HttpOutput::as_json(result).into_ok_result(true).into();
+    }
     let mut request = TradingExecutorUpdateSlTpGrpcRequest {
         position_id: input_data.position_id,
         account_id: input_data.account_id,
@@ -46,7 +48,7 @@ async fn handle_request(
         sl_in_profit: None,
         tp_in_asset_price: None,
         sl_in_asset_price: None,
-        process_id: input_data.process_id,
+        process_id: input_data.process_id.clone(),
     };
 
     if input_data.tp_type.is_some() {
@@ -96,6 +98,8 @@ async fn handle_request(
             }
         }
     };
+
+    action.app.cache.set(&input_data.process_id, response.clone()).await;
 
     return HttpOutput::as_json(response).into_ok_result(true).into();
 }

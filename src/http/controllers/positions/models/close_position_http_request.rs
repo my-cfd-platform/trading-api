@@ -16,13 +16,13 @@ pub struct ClosePositionHttpRequest {
     pub position_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure, Clone)]
 pub struct ClosePositionHttpResponse {
     pub result: ApiResponseCodes,
     pub position: Option<ClosedPositionApiModel>,
 }
 
-#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure, Clone)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct ClosedPositionApiModel {
     pub id: String,

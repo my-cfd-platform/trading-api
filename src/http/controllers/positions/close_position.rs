@@ -40,9 +40,13 @@ async fn handle_request(
 ) -> Result<HttpOkResult, HttpFailResult> {
     let trader_id = ctx.get_client_id()?;
 
+    if let Some(result) = action.app.cache.get::<ClosePositionHttpResponse>(&input_data.process_id).await{
+        return HttpOutput::as_json(result).into_ok_result(true).into();
+    }
+
     let request = TradingExecutorClosePositionGrpcRequest {
         position_id: input_data.position_id,
-        process_id: input_data.process_id,
+        process_id: input_data.process_id.clone(),
         account_id: input_data.account_id.clone(),
         trader_id: trader_id.to_string(),
     };
@@ -75,6 +79,6 @@ async fn handle_request(
             }
         }
     };
-
+    action.app.cache.set(&input_data.process_id, response.clone()).await;
     return HttpOutput::as_json(response).into_ok_result(true).into();
 }

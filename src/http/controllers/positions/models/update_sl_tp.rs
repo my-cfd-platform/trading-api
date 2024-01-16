@@ -6,7 +6,7 @@ use crate::http::ApiResponseCodes;
 
 use super::*;
 
-#[derive(MyHttpInput)]
+#[derive(Clone, MyHttpInput)]
 pub struct UpdateSlTpHttpRequest {
     #[http_form_data(name = "processId"; description = "Process id")]
     pub process_id: String,
@@ -24,7 +24,7 @@ pub struct UpdateSlTpHttpRequest {
     pub sl_type: Option<SlTpType>,
 }
 
-#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure, Clone)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct UpdateTpSlHttpResponse {
     pub result: ApiResponseCodes,

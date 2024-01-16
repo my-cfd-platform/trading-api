@@ -50,14 +50,14 @@ pub struct OpenPositionHttpRequest {
     pub sl_type: Option<SlTpType>,
 }
 
-#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure, Clone)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct OpenPositionHttpResponse {
     pub result: ApiResponseCodes,
     pub position: Option<ActivePositionApiModel>,
 }
 
-#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
+#[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure, Clone)]
 pub struct ActivePositionApiModel {
     pub id: String,
     #[serde(rename = "accountId")]
