@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use app::AppContext;
 use http::register_controllers;
+use service_sdk::ServiceInfo;
 
 pub mod trading_executor_grpc {
     tonic::include_proto!("trading_executor");
@@ -29,6 +30,13 @@ async fn main() {
 
         register_controllers(app_context.clone(), builder);
     });
+
+    trade_log::core::TRADE_LOG
+        .init_component_name(settings_reader.get_service_name().as_str())
+        .await;
+    trade_log::core::TRADE_LOG
+        .start(&service_context.sb_client)
+        .await;
 
     service_context.start_application().await;
 }

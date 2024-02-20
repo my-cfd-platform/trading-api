@@ -286,6 +286,7 @@ impl Into<ApiResponseCodes> for TradingExecutorOperationsCodes {
                 ApiResponseCodes::TradingProfileInstrumentNotFound
             }
             TradingExecutorOperationsCodes::ABookReject => ApiResponseCodes::ExecutionReject,
+            TradingExecutorOperationsCodes::ProcessIdDuplicate => ApiResponseCodes::ExecutionReject,
         }
     }
 }

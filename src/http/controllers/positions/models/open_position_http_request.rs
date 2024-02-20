@@ -26,7 +26,7 @@ pub enum PositionSide {
     Sell,
 }
 
-#[derive(MyHttpInput)]
+#[derive(MyHttpInput, Serialize, Deserialize)]
 pub struct OpenPositionHttpRequest {
     #[http_form_data(name = "processId"; description = "Process id")]
     pub process_id: String,

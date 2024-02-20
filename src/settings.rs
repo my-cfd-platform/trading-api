@@ -17,6 +17,8 @@ pub struct SettingsModel {
     pub my_telemetry: String,
     pub seq_conn_string: String,
     pub trading_executor_grpc_service: String,
+    pub my_sb_tcp_host_port: String,
+
 }
 
 #[async_trait::async_trait]
