@@ -5,7 +5,7 @@ use my_http_server::{HttpContext, HttpFailResult, HttpOkResult, HttpOutput};
 use rest_api_wl_shared::GetClientId;
 
 use crate::{
-    app::AppContext, http::map_http_to_grpc_open_position,
+    app::AppContext, http::{map_http_to_grpc_open_position, ApiResponseCodes},
     trading_executor_grpc::TradingExecutorOperationsCodes,
 };
 
@@ -52,20 +52,37 @@ async fn handle_request(
 
     let request = map_http_to_grpc_open_position(&input_data, trader_id);
 
-    if let Some(result) = action.app.cache.get::<OpenPositionHttpResponse>(&input_data.process_id).await{
+    if let Some(result) = action.app.cache.get_and_track_empty::<OpenPositionHttpResponse>(&input_data.process_id).await{
 
-        trade_log::trade_log!(
-            trader_id,
-            &input_data.account_id,
-            &input_data.process_id,
-            "n/a",
-            "Found request with same process id - returning old.",
-            ctx.telemetry_context.clone(),
-            "input_data" = &input_data,
-            "result" = &result
-        );
+        if let Some(cached_response) = result{
+            trade_log::trade_log!(
+                trader_id,
+                &input_data.account_id,
+                &input_data.process_id,
+                "n/a",
+                "Found request with same process id, but with response - returning old.",
+                ctx.telemetry_context.clone(),
+                "input_data" = &input_data,
+                "response" = &cached_response
+            );
 
-        return HttpOutput::as_json(result).into_ok_result(true).into();
+            return HttpOutput::as_json(cached_response).into_ok_result(true).into();
+        }else{
+            trade_log::trade_log!(
+                trader_id,
+                &input_data.account_id,
+                &input_data.process_id,
+                "n/a",
+                "Found request with same process id without response - returning error.",
+                ctx.telemetry_context.clone(),
+                "input_data" = &input_data
+            );
+
+            return HttpOutput::as_json(OpenPositionHttpResponse{
+                result: ApiResponseCodes::ProcessIdDuplicate,
+                position: None,
+            }).into_ok_result(true).into();
+        }
     }
     
     let grpc_response = action

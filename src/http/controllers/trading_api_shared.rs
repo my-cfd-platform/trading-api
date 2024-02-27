@@ -101,4 +101,6 @@ pub enum ApiResponseCodes {
     TradingProfileInstrumentNotFound,
     #[http_enum_case(id="25"; value="25"; description="")]
     ExecutionReject,
+    #[http_enum_case(id="26"; value="26"; description="")]
+    ProcessIdDuplicate,
 }
