@@ -19,7 +19,7 @@ use super::OpenLimitPositionHttpRequest;
     description: "Set pending order",
     input_data: "OpenLimitPositionHttpRequest",
     controller: "Orders",
-    authorized: ["KYC"],
+  
     result:[
         {status_code: 200, description: "Ok response", model: "OpenPendingPositionHttpResponse"},
     ]

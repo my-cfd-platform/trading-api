@@ -18,7 +18,7 @@ use super::*;
     description: "Open client position",
     controller: "Positions",
     input_data: "OpenPositionHttpRequest",
-    authorized: ["KYC"],
+    
     result:[
         {status_code: 200, description: "Ok response", model: "OpenPositionHttpResponse"},
     ]

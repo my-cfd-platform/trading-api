@@ -21,7 +21,7 @@ use super::CancelPendingPositionHttpRequest;
     description: "Cancel pending order",
     input_data: "CancelPendingPositionHttpRequest",
     controller: "Orders",
-    authorized: ["KYC"],
+    
     result:[
         {status_code: 200, description: "Ok response", model: "CancelPendingPositionHttpResponse"},
     ]

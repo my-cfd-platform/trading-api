@@ -1,4 +1,4 @@
-use service_sdk::{my_grpc_extensions, my_telemetry};
+service_sdk::macros::use_grpc_client!();
 
 #[my_grpc_extensions::client::generate_grpc_client(
     proto_file: "./proto/TradingExecutorGrpcService.proto",
