@@ -17,7 +17,6 @@ pub struct CancelPendingPositionHttpRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, MyHttpObjectStructure)]
-#[serde(rename_all(deserialize = "camelCase"))]
 pub struct CancelPendingPositionHttpResponse {
     pub result: ApiResponseCodes,
     pub position: Option<PendingPositionApiModel>,
