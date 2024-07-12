@@ -66,7 +66,7 @@ async fn handle_request(
                 "response" = &cached_response
             );
 
-            return HttpOutput::as_json(cached_response).into_ok_result(true).into();
+            return HttpOutput::as_json(cached_response).into_ok_result(true);
         }else{
             trade_log::trade_log!(
                 trader_id,
@@ -81,7 +81,7 @@ async fn handle_request(
             return HttpOutput::as_json(OpenPositionHttpResponse{
                 result: ApiResponseCodes::ProcessIdDuplicate,
                 position: None,
-            }).into_ok_result(true).into();
+            }).into_ok_result(true);
         }
     }
     
@@ -113,7 +113,7 @@ async fn handle_request(
         &input_data.account_id,
         &input_data.process_id,
         "n/a",
-        "Got grpc response from trading executor",
+        "Got grpc response from engine",
         ctx.telemetry_context.clone(),
         "input_data" = &input_data,
         "grpc_response" = &grpc_response,
@@ -122,5 +122,7 @@ async fn handle_request(
 
     action.app.cache.set(&input_data.process_id, response.clone()).await;
 
-    return HttpOutput::as_json(response).into_ok_result(true).into();
+    println!("response: {}", serde_json::to_string(&response).unwrap());
+
+    HttpOutput::as_json(response).into_ok_result(true)
 }
